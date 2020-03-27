@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:backgroundTint="#FFFFFF"
     tools:context=".MainActivity">
 
     <SearchView
@@ -13,10 +14,10 @@
         android:layout_margin="20dp"
         android:background="@drawable/round_bg"
         android:elevation="2dp"
-        android:padding="10dp"
-        android:queryHint="Search Here"
-        android:queryBackground="@color/colorSearch"
         android:iconifiedByDefault="false"
+        android:padding="10dp"
+        android:queryBackground="@color/colorSearch"
+        android:queryHint="Search Here"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
