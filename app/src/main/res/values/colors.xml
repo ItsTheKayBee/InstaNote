@@ -4,4 +4,6 @@
     <color name="colorPrimaryDark">#1769AA</color>
     <color name="colorAccent">#03DAC5</color>
     <color name="colorSearch">#ffffff</color>
+    <color name="colorCardDark">#dedede</color>
+    <color name="colorCardBorder">#000</color>
 </resources>

@@ -9,17 +9,27 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
+
 public class PinnedAdapter extends RecyclerView.Adapter<PinnedAdapter.PinnedViewHolder> {
 
-    private String[] cardTitleData;
-    private String[] cardTextData;
+    private ArrayList<String> cardTitleData;
+    private ArrayList<String> cardTextData;
     private CardClickListener mClickListener;
-    private LayoutInflater inflater;
+    private ArrayList<Integer> selectedList;
+    private CardLongClickListener mLongClickListener;
 
-    PinnedAdapter(Context ctx, String[] title, String[] text) {
+    PinnedAdapter(Context ctx, ArrayList<String> title, ArrayList<String> text) {
         this.inflater = LayoutInflater.from(ctx);
         this.cardTitleData = title;
         this.cardTextData = text;
+        selectedList = new ArrayList<>();
+    }
+
+    private LayoutInflater inflater;
+
+    public void setLongClickListener(CardLongClickListener mLongClickListener) {
+        this.mLongClickListener = mLongClickListener;
     }
 
     @NonNull
@@ -31,34 +41,52 @@ public class PinnedAdapter extends RecyclerView.Adapter<PinnedAdapter.PinnedView
 
     @Override
     public void onBindViewHolder(@NonNull PinnedViewHolder holder, int position) {
-        String title = cardTitleData[position];
-        String text = cardTextData[position];
+        String title = cardTitleData.get(position);
+        String text = cardTextData.get(position);
         holder.cardTitle.setText(title);
         holder.cardText.setText(text);
+
+        if (getSelectedList().contains(position)) {
+            holder.itemView.setBackgroundResource(R.drawable.card_dark);
+        } else {
+            holder.itemView.setBackgroundResource(R.drawable.card);
+        }
     }
 
     @Override
     public int getItemCount() {
-        return cardTitleData.length;
+        return cardTitleData.size();
     }
 
     String getCardText(int id) {
-        return cardTextData[id];
+        return cardTextData.get(id);
     }
 
     String getCardTitle(int id) {
-        return cardTitleData[id];
+        return cardTitleData.get(id);
     }
 
     void setClickListener(CardClickListener cardClickListener) {
         this.mClickListener = cardClickListener;
     }
 
+    public ArrayList<Integer> getSelectedList() {
+        return selectedList;
+    }
+
+    public void setSelectedList(ArrayList<Integer> selectedList) {
+        this.selectedList = selectedList;
+    }
+
     public interface CardClickListener {
         void onCardClick(View view, int position);
     }
 
-    public class PinnedViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public interface CardLongClickListener {
+        void onCardLongClick(View view, int position);
+    }
+
+    public class PinnedViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
         TextView cardTitle;
         TextView cardText;
 
@@ -67,12 +95,20 @@ public class PinnedAdapter extends RecyclerView.Adapter<PinnedAdapter.PinnedView
             cardTitle = itemView.findViewById(R.id.cardTitle);
             cardText = itemView.findViewById(R.id.cardText);
             itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
             if (mClickListener != null)
                 mClickListener.onCardClick(view, getAdapterPosition());
+        }
+
+        @Override
+        public boolean onLongClick(View view) {
+            if (mLongClickListener != null)
+                mLongClickListener.onCardLongClick(view, getAdapterPosition());
+            return true;
         }
     }
 }
