@@ -1,11 +1,19 @@
 <resources>
 
-    <style name="CustomTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="CustomTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:fontFamily">sans-serif</item>
         <item name="actionModeBackground">@color/colorPrimary</item>
+    </style>
+
+    <style name="ThemeOverlay.App.MaterialAlertDialog" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="buttonBarPositiveButtonStyle">@style/AlertDialogPositiveButton</item>
+    </style>
+
+    <style name="AlertDialogPositiveButton" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">#f44336</item>
     </style>
 
     <style name="cardContainer">

@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/unsave"
-        android:icon="@drawable/delete"
-        android:title="Star"
+        android:icon="@drawable/delete_note"
+        android:title="Delete"
         app:showAsAction="always" />
     <item
         android:id="@+id/palette"
-        android:icon="@drawable/select_colors"
-        android:title="Colors"
+        android:icon="@drawable/change_color"
+        android:title="Change Background Color"
         app:showAsAction="always" />
 
 </menu>

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/pin"
-        android:icon="@drawable/ic_pin"
-        android:title="Pin"
+        android:icon="@drawable/pin"
+        android:title="Saved Notes"
         app:showAsAction="always" />
 </menu>

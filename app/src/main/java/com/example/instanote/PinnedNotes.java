@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +15,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -128,16 +133,44 @@ public class PinnedNotes extends AppCompatActivity implements PinnedAdapter.Card
     }
 
     private void unsave() {
-        Collections.sort(selectedArray);
-        int count = 0;
-        for (int i : selectedArray) {
-            textList.remove(i - count);
-            titlesList.remove(i - count);
-            adapter.notifyItemRemoved(i - count);
-            count++;
-        }
-        selectedArray.clear();
-        mode.finish();
+
+        new MaterialAlertDialogBuilder(PinnedNotes.this, R.style.ThemeOverlay_App_MaterialAlertDialog)
+                .setTitle("Are you sure?")
+                .setMessage("The selected notes will be deleted")
+                .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        // do nothing
+                    }
+                })
+                .setPositiveButton("DELETE", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                        Collections.sort(selectedArray);
+                        int count = 0;
+                        int size = selectedArray.size();
+                        for (int j : selectedArray) {
+                            textList.remove(j - count);
+                            titlesList.remove(j - count);
+                            adapter.notifyItemRemoved(j - count);
+                            count++;
+                        }
+                        selectedArray.clear();
+                        mode.finish();
+                        View view = findViewById(R.id.unsave);
+                        String snackText = "";
+                        if (size == 1) {
+                            snackText = size + " notes deleted";
+                        } else {
+                            snackText = size + " notes deleted";
+                        }
+                        Snackbar.make(view, snackText, BaseTransientBottomBar.LENGTH_SHORT)
+                                .show();
+                    }
+                })
+                .setCancelable(false)
+                .show();
     }
 
     @Override
