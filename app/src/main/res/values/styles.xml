@@ -3,7 +3,7 @@
     <style name="CustomTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorAccent">@color/colorPrimary</item>
         <item name="android:fontFamily">sans-serif</item>
         <item name="actionModeBackground">@color/colorPrimary</item>
     </style>

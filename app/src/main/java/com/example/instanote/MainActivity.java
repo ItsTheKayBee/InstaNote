@@ -5,11 +5,15 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.animation.ObjectAnimator;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.SearchView;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 
 public class MainActivity extends AppCompatActivity {
     private SearchView searchView;
@@ -28,6 +32,16 @@ public class MainActivity extends AppCompatActivity {
                     objectAnimator.setDuration(300);
                     objectAnimator.start();
                 }
+            }
+        });
+
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setColorFilter(Color.WHITE);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Snackbar displayed", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
             }
         });
     }
