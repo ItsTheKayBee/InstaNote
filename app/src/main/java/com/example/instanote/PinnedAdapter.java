@@ -9,6 +9,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.card.MaterialCardView;
+
 import java.util.ArrayList;
 
 public class PinnedAdapter extends RecyclerView.Adapter<PinnedAdapter.PinnedViewHolder> {
@@ -45,11 +47,12 @@ public class PinnedAdapter extends RecyclerView.Adapter<PinnedAdapter.PinnedView
         String text = cardTextData.get(position);
         holder.cardTitle.setText(title);
         holder.cardText.setText(text);
+        MaterialCardView materialCardView = (MaterialCardView) holder.itemView;
 
         if (getSelectedList().contains(position)) {
-            holder.itemView.setBackgroundResource(R.drawable.card_dark);
+            materialCardView.setChecked(true);
         } else {
-            holder.itemView.setBackgroundResource(R.drawable.card);
+            materialCardView.setChecked(false);
         }
     }
 
