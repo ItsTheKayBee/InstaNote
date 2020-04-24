@@ -2,6 +2,7 @@ package com.example.instanote;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
@@ -33,14 +34,14 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.mainpage_menu,menu);
+        getMenuInflater().inflate(R.menu.mainpage_menu, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if(item.getItemId()==R.id.pin){
-            Intent i=new Intent(MainActivity.this,PinnedNotes.class);
+        if (item.getItemId() == R.id.pin) {
+            Intent i = new Intent(MainActivity.this, PinnedNotes.class);
             startActivity(i);
         }
         return super.onOptionsItemSelected(item);

@@ -31,6 +31,21 @@ public class PinnedNotes extends AppCompatActivity implements PinnedAdapter.Card
     private ArrayList<Integer> selectedArray;
     private ArrayList<String> titlesList;
     private ArrayList<String> textList;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_pinned_notes);
+
+        String[] title = {"Note1 lorem ipsum is is lorem ipsum is lorem ipsum lorem is lorem ipsum is is lorem ipsum is lorem ipsum lorem is", "Note2", "Note3", "Note4", "Note1", "Note2", "Note3", "Note4", "Note1", "Note2", "Note3", "Note4"};
+        titlesList = new ArrayList<>(Arrays.asList(title));
+        String[] text = {"lorem lorem ipsum is is lorem ipsum is lorem ipsum lorem is lorem ipsum is is lorem ipsum is lorem ipsum lorem is lorem ipsum is is lorem ipsum is lorem ipsum lorem is ipsum is is lorem ipsum is lorem ipsum lorem is ipsum lorem ipsum is lorem ipsum lorem ipsum lorem is ipsum lorem ipsum", "lorem ipsum is is lorem ipsum is lorem ipsum lorem is ipsum lorem ipsum is lorem ipsum lorem ipsum lorem is ipsum lorem ipsum edefe efwewfwe", "Noterrevre1 edefe lorem ipsum is is lorem ipsum is lorem ipsum lorem is ipsum lorem ipsum is lorem ipsum lorem ipsum lorem is ipsum lorem ipsum", "Noterrevre1 edefe efwewfwe", "Noterrevre1 edefe efwewfwe", "Noterrevre1 edefe efwewfwe", "lorem ipsum is is lorem ipsum is lorem ipsum lorem is ipsum lorem ipsum is lorem ipsum lorem ipsum lorem is ipsum lorem ipsum edefe efwewfwe", "Note4", "Note1", "lorem ipsum is is lorem ipsum is lorem ipsum lorem is ipsum lorem ipsum is lorem ipsum lorem ipsum lorem is ipsum lorem ipsum", "lorem ipsum is is lorem ipsum is lorem ipsum lorem is ipsum lorem ipsum is lorem ipsum lorem ipsum lorem is ipsum lorem ipsum", "lorem ipsum is is lorem ipsum is lorem ipsum lorem is ipsum lorem ipsum is lorem ipsum lorem ipsum lorem is ipsum lorem ipsum"};
+        textList = new ArrayList<>(Arrays.asList(text));
+
+        setRecyclerView(titlesList, textList);
+        selectedArray = new ArrayList<>();
+    }
+
     private ActionMode.Callback actionCallback = new ActionMode.Callback() {
         @Override
         public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
@@ -65,33 +80,6 @@ public class PinnedNotes extends AppCompatActivity implements PinnedAdapter.Card
             mode = null;
         }
     };
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pinned_notes);
-
-        String[] title = {"Note1 lorem ipsum is is lorem ipsum is lorem ipsum lorem is lorem ipsum is is lorem ipsum is lorem ipsum lorem is", "Note2", "Note3", "Note4", "Note1", "Note2", "Note3", "Note4", "Note1", "Note2", "Note3", "Note4"};
-        titlesList = new ArrayList<>(Arrays.asList(title));
-        String[] text = {"lorem lorem ipsum is is lorem ipsum is lorem ipsum lorem is lorem ipsum is is lorem ipsum is lorem ipsum lorem is lorem ipsum is is lorem ipsum is lorem ipsum lorem is ipsum is is lorem ipsum is lorem ipsum lorem is ipsum lorem ipsum is lorem ipsum lorem ipsum lorem is ipsum lorem ipsum", "lorem ipsum is is lorem ipsum is lorem ipsum lorem is ipsum lorem ipsum is lorem ipsum lorem ipsum lorem is ipsum lorem ipsum edefe efwewfwe", "Noterrevre1 edefe lorem ipsum is is lorem ipsum is lorem ipsum lorem is ipsum lorem ipsum is lorem ipsum lorem ipsum lorem is ipsum lorem ipsum", "Noterrevre1 edefe efwewfwe", "Noterrevre1 edefe efwewfwe", "Noterrevre1 edefe efwewfwe", "lorem ipsum is is lorem ipsum is lorem ipsum lorem is ipsum lorem ipsum is lorem ipsum lorem ipsum lorem is ipsum lorem ipsum edefe efwewfwe", "Note4", "Note1", "lorem ipsum is is lorem ipsum is lorem ipsum lorem is ipsum lorem ipsum is lorem ipsum lorem ipsum lorem is ipsum lorem ipsum", "lorem ipsum is is lorem ipsum is lorem ipsum lorem is ipsum lorem ipsum is lorem ipsum lorem ipsum lorem is ipsum lorem ipsum", "lorem ipsum is is lorem ipsum is lorem ipsum lorem is ipsum lorem ipsum is lorem ipsum lorem ipsum lorem is ipsum lorem ipsum"};
-        textList = new ArrayList<>(Arrays.asList(text));
-
-        setRecyclerView(titlesList, textList);
-        selectedArray = new ArrayList<>();
-    }
-
-    @Override
-    public void onCardClick(View view, int position) {
-        if (mode == null) {
-            Intent intent = new Intent(this, ResultActivity.class);
-            intent.putExtra(TITLE, adapter.getCardTitle(position));
-            intent.putExtra(TEXT, adapter.getCardText(position));
-            intent.putExtra(PINNED, true);
-            startActivity(intent);
-        } else {
-            selectCard(view, position);
-        }
-    }
 
     @Override
     public void onCardLongClick(View view, int position) {
@@ -150,6 +138,19 @@ public class PinnedNotes extends AppCompatActivity implements PinnedAdapter.Card
         }
         selectedArray.clear();
         mode.finish();
+    }
+
+    @Override
+    public void onCardClick(View view, int position) {
+        if (mode == null) {
+            Intent intent = new Intent(this, ResultActivity.class);
+            intent.putExtra(TITLE, adapter.getCardTitle(position));
+            intent.putExtra(TEXT, adapter.getCardText(position));
+            intent.putExtra(PINNED, true);
+            startActivity(intent);
+        } else {
+            selectCard(view, position);
+        }
     }
 
 }

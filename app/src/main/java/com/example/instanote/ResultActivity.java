@@ -27,8 +27,6 @@ public class ResultActivity extends AppCompatActivity {
         resTitle = findViewById(R.id.resTitle);
         resText.setText(text);
         resTitle.setText(title);
-
-
     }
 
     @Override
@@ -37,15 +35,20 @@ public class ResultActivity extends AppCompatActivity {
         pinned = getIntent().getBooleanExtra(PinnedNotes.PINNED, false);
         inflater.inflate(R.menu.menu, menu);
         final MenuItem star = menu.findItem(R.id.save);
+        if (pinned) {
+            star.setIcon(R.drawable.ic_star_white_24dp);
+        } else {
+            star.setIcon(R.drawable.ic_star_border_white_24dp);
+        }
         star.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
-                if (pinned == true) {
+                if (!pinned) {
                     star.setIcon(R.drawable.ic_star_white_24dp);
-                    pinned = false;
+                    pinned = true;
                 } else {
                     star.setIcon(R.drawable.ic_star_border_white_24dp);
-                    pinned = true;
+                    pinned = false;
                 }
                 return true;
             }
