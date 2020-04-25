@@ -35,14 +35,14 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
-        <receiver android:name=".Static_Widget">
+        <receiver android:name=".StaticWidget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
 
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/static__widget_info" />
+                android:resource="@xml/static_widget_info" />
         </receiver>
     </application>
 

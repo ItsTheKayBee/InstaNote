@@ -8,16 +8,17 @@ import android.widget.RemoteViews;
 /**
  * Implementation of App Widget functionality.
  */
-public class Static_Widget extends AppWidgetProvider {
+public class StaticWidget extends AppWidgetProvider {
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
 
-        CharSequence widgetText = context.getString(R.string.appwidget_text);
+        CharSequence widgetTitle = context.getString(R.string.appwidget_text);
+        CharSequence widgetText = "A data structure is a particular way of organizing data in a computer so that it can be used effectively.A data structure is a particular way of organizing data in a computer so that it can be used effectively.A data structure is a particular way of organizing data in a computer so that it can be used effectively.";
         // Construct the RemoteViews object
-        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.static__widget);
-        views.setTextViewText(R.id.appwidget_text, widgetText);
-
+        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.static_widget);
+        views.setTextViewText(R.id.note_title, widgetTitle);
+        views.setTextViewText(R.id.note_content, widgetText);
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }
