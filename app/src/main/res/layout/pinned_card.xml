@@ -24,15 +24,15 @@
             android:layout_height="wrap_content"
             android:maxLines="2"
             android:textAppearance="?attr/textAppearanceHeadline6" />
-
-        <TextView
-            android:id="@+id/cardWeb"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:maxLines="1"
-            android:textAppearance="?attr/textAppearanceBody2"
-            android:textColor="?android:attr/textColorSecondary" />
+        <!--
+                <TextView
+                    android:id="@+id/cardWeb"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:maxLines="1"
+                    android:textAppearance="?attr/textAppearanceBody2"
+                    android:textColor="?android:attr/textColorSecondary" />-->
 
         <TextView
             android:id="@+id/cardText"

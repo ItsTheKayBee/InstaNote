@@ -5,8 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.animation.ObjectAnimator;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,6 +14,8 @@ import android.widget.SearchView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+
+import static com.example.instanote.SearchAppWidget.FOCUS;
 
 public class MainActivity extends AppCompatActivity {
     private SearchView searchView;
@@ -31,6 +33,10 @@ public class MainActivity extends AppCompatActivity {
                     objectAnimator = ObjectAnimator.ofFloat(searchView, "y", 50);
                     objectAnimator.setDuration(300);
                     objectAnimator.start();
+                } else {
+                    objectAnimator = ObjectAnimator.ofFloat(searchView, "y", -50);
+                    objectAnimator.setDuration(300);
+                    objectAnimator.start();
                 }
             }
         });
@@ -43,6 +49,20 @@ public class MainActivity extends AppCompatActivity {
                         .show();
             }
         });
+
+        boolean focus = getIntent().getBooleanExtra(FOCUS, false);
+        if (focus) {
+            searchView.requestFocus();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        boolean focus = getIntent().getBooleanExtra(FOCUS, false);
+        if (focus) {
+            searchView.requestFocus();
+        }
     }
 
     @Override
