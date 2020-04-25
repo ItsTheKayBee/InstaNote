@@ -18,7 +18,7 @@
         android:background="@drawable/round_bg"
         android:clickable="true"
         android:elevation="2dp"
-        android:focusable="auto"
+        android:focusable="true"
         android:focusableInTouchMode="true"
         android:iconifiedByDefault="false"
         android:padding="10dp"
@@ -30,19 +30,17 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_gravity="bottom|right"
-        android:layout_margin="20dp"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
         android:backgroundTint="@color/colorPrimary"
         android:src="@drawable/more_results"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.930"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/search_bar"
-        app:layout_constraintVertical_bias="0.836"
-        app:fabCustomSize="60dp"/>
+        app:tint="#ffffff" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
