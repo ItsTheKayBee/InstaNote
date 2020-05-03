@@ -1,22 +1,18 @@
 package com.example.instanote;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.ActionMode;
-import android.view.KeyEvent;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.google.android.material.card.MaterialCardView;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
@@ -24,19 +20,20 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Objects;
 
 public class PinnedNotes extends AppCompatActivity implements PinnedAdapter.CardClickListener, PinnedAdapter.CardLongClickListener {
 
     public static final String TITLE = "TITLE";
     public static final String TEXT = "TEXT";
     public static final String PINNED = "PINNED";
+    public static final String LINK = "LINK";
     RecyclerView recyclerView;
     private PinnedAdapter adapter;
     private ActionMode mode = null;
     private ArrayList<Integer> selectedArray;
     private ArrayList<String> titlesList;
     private ArrayList<String> textList;
+    private ArrayList<String> linkList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,9 +44,12 @@ public class PinnedNotes extends AppCompatActivity implements PinnedAdapter.Card
         titlesList = new ArrayList<>(Arrays.asList(title));
         String[] text = {"lorem lorem ipsum is is lorem ipsum is lorem ipsum lorem is lorem ipsum is is lorem ipsum is lorem ipsum lorem is lorem ipsum is is lorem ipsum is lorem ipsum lorem is ipsum is is lorem ipsum is lorem ipsum lorem is ipsum lorem ipsum is lorem ipsum lorem ipsum lorem is ipsum lorem ipsum", "lorem ipsum is is lorem ipsum is lorem ipsum lorem is ipsum lorem ipsum is lorem ipsum lorem ipsum lorem is ipsum lorem ipsum edefe efwewfwe", "Noterrevre1 edefe lorem ipsum is is lorem ipsum is lorem ipsum lorem is ipsum lorem ipsum is lorem ipsum lorem ipsum lorem is ipsum lorem ipsum", "Noterrevre1 edefe efwewfwe", "Noterrevre1 edefe efwewfwe", "Noterrevre1 edefe efwewfwe", "lorem ipsum is is lorem ipsum is lorem ipsum lorem is ipsum lorem ipsum is lorem ipsum lorem ipsum lorem is ipsum lorem ipsum edefe efwewfwe", "Note4", "Note1", "lorem ipsum is is lorem ipsum is lorem ipsum lorem is ipsum lorem ipsum is lorem ipsum lorem ipsum lorem is ipsum lorem ipsum", "lorem ipsum is is lorem ipsum is lorem ipsum lorem is ipsum lorem ipsum is lorem ipsum lorem ipsum lorem is ipsum lorem ipsum", "lorem ipsum is is lorem ipsum is lorem ipsum lorem is ipsum lorem ipsum is lorem ipsum lorem ipsum lorem is ipsum lorem ipsum"};
         textList = new ArrayList<>(Arrays.asList(text));
+        String[] links = {"https://en.wikipedia.org/wiki/Depth-first_search", "https://en.wikipedia.org/wiki/Depth-first_search", "https://en.wikipedia.org/wiki/Depth-first_search", "https://en.wikipedia.org/wiki/Depth-first_search", "https://en.wikipedia.org/wiki/Depth-first_search", "https://en.wikipedia.org/wiki/Depth-first_search", "https://en.wikipedia.org/wiki/Depth-first_search", "https://en.wikipedia.org/wiki/Depth-first_search", "https://en.wikipedia.org/wiki/Depth-first_search", "https://en.wikipedia.org/wiki/Depth-first_search", "https://en.wikipedia.org/wiki/Depth-first_search", "https://www.geeksforgeeks.org/depth-first-search-or-dfs-for-a-graph/"};
+        linkList = new ArrayList<>(Arrays.asList(links));
 
-        setRecyclerView(titlesList, textList);
+        setRecyclerView(titlesList, linkList, textList);
         selectedArray = new ArrayList<>();
+
     }
 
     private ActionMode.Callback actionCallback = new ActionMode.Callback() {
@@ -97,11 +97,11 @@ public class PinnedNotes extends AppCompatActivity implements PinnedAdapter.Card
         }
     }
 
-    private void setRecyclerView(ArrayList<String> title, ArrayList<String> text) {
+    private void setRecyclerView(ArrayList<String> title, ArrayList<String> link, ArrayList<String> text) {
         recyclerView = findViewById(R.id.pinned_notes);
         int mNoOfColumns = Utility.calculateNoOfColumns(getApplicationContext(), 180);
         recyclerView.setLayoutManager(new GridLayoutManager(this, mNoOfColumns));
-        adapter = new PinnedAdapter(this, title, text);
+        adapter = new PinnedAdapter(this, title, link, text);
         adapter.setClickListener(this);
         adapter.setLongClickListener(this);
         recyclerView.setAdapter(adapter);
@@ -154,15 +154,16 @@ public class PinnedNotes extends AppCompatActivity implements PinnedAdapter.Card
                         for (int j : selectedArray) {
                             textList.remove(j - count);
                             titlesList.remove(j - count);
+                            linkList.remove(j - count);
                             adapter.notifyItemRemoved(j - count);
                             count++;
                         }
                         selectedArray.clear();
                         mode.finish();
                         View view = findViewById(R.id.unsave);
-                        String snackText = "";
+                        String snackText;
                         if (size == 1) {
-                            snackText = size + " notes deleted";
+                            snackText = size + " note deleted";
                         } else {
                             snackText = size + " notes deleted";
                         }
@@ -180,11 +181,11 @@ public class PinnedNotes extends AppCompatActivity implements PinnedAdapter.Card
             Intent intent = new Intent(this, ResultActivity.class);
             intent.putExtra(TITLE, adapter.getCardTitle(position));
             intent.putExtra(TEXT, adapter.getCardText(position));
+            intent.putExtra(LINK, adapter.getCardLink(position));
             intent.putExtra(PINNED, true);
             startActivity(intent);
         } else {
             selectCard(view, position);
         }
     }
-
 }

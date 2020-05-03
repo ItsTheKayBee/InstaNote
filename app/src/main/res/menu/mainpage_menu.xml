@@ -6,4 +6,11 @@
         android:icon="@drawable/pin"
         android:title="Saved Notes"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/clear_results"
+        android:icon="@drawable/clear_results"
+        android:title="Clear Results"
+        android:visible="false"
+        app:showAsAction="always" />
+
 </menu>

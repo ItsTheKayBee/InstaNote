@@ -12,7 +12,7 @@
         tools:context=".ResultActivity">
 
         <EditText
-            android:id="@+id/resTitle"
+            android:id="@+id/res_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -20,6 +20,7 @@
             android:layout_marginEnd="16dp"
             android:background="#00000000"
             android:hint="Title"
+            android:importantForAutofill="no"
             android:inputType="textCapSentences|textMultiLine"
             android:textAppearance="?attr/textAppearanceHeadline6"
             app:layout_constraintEnd_toEndOf="parent"
@@ -27,25 +28,27 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/resLink"
+            android:id="@+id/res_link"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:background="@drawable/round_bg"
+            android:clickable="true"
+            android:focusable="true"
             android:maxLines="1"
             android:paddingLeft="16dp"
-            android:paddingRight="16dp"
             android:paddingTop="5dp"
-            android:text="htpp://google.com/"
+            android:paddingRight="16dp"
             android:paddingBottom="5dp"
+            android:text="htpp://google.com/"
             android:textAppearance="?attr/textAppearanceBody2"
             android:textColor="?android:attr/textColorSecondary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/resTitle" />
+            app:layout_constraintTop_toBottomOf="@+id/res_title" />
 
         <EditText
-            android:id="@+id/resText"
+            android:id="@+id/res_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
@@ -59,9 +62,9 @@
             android:padding="16dp"
             android:scrollbars="vertical"
             android:textAppearance="?attr/textAppearanceBody2"
-            android:textColor="?android:attr/textColorSecondary"
+            android:textColor="#000"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/resLink" />
+            app:layout_constraintTop_toBottomOf="@+id/res_link" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
