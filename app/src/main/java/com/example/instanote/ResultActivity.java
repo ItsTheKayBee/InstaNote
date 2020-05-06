@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
@@ -55,26 +56,37 @@ public class ResultActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         pinned = getIntent().getBooleanExtra(PinnedNotes.PINNED, false);
-        inflater.inflate(R.menu.menu, menu);
-        final MenuItem star = menu.findItem(R.id.save);
+        MenuItem star = menu.findItem(R.id.save);
         if (pinned) {
             star.setIcon(R.drawable.ic_star_white_24dp);
         } else {
             star.setIcon(R.drawable.ic_star_border_white_24dp);
         }
-        star.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem menuItem) {
+        inflater.inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.save:
                 if (!pinned) {
-                    star.setIcon(R.drawable.ic_star_white_24dp);
+                    item.setIcon(R.drawable.ic_star_white_24dp);
                     pinned = true;
                 } else {
-                    star.setIcon(R.drawable.ic_star_border_white_24dp);
+                    item.setIcon(R.drawable.ic_star_border_white_24dp);
                     pinned = false;
                 }
                 return true;
-            }
-        });
-        return true;
+            case R.id.share:
+                shareThroughBluetooth();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void shareThroughBluetooth() {
+        //make BluetoothShare class obj here
     }
 }

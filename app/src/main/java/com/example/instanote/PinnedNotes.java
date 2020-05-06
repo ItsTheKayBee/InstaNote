@@ -160,6 +160,9 @@ public class PinnedNotes extends AppCompatActivity implements PinnedAdapter.Card
                         }
                         selectedArray.clear();
                         mode.finish();
+
+                        //delete files here
+
                         View view = findViewById(R.id.unsave);
                         String snackText;
                         if (size == 1) {

@@ -73,8 +73,8 @@ final class SearchResults {
     }
 
     private static class GetLinks extends AsyncTask<String, Void, Void> {
-        private static final String API_KEY = "AIzaSyAOkyzSPmfQYrZiW7hq-8AjzsBBKrwa12w";
-        private static final String CSE_ID = "000376973815356581134:3u2sdqs8rdw";
+        private static final String API_KEY = BuildConfig.SEARCH_API_KEY;
+        private static final String CSE_ID = BuildConfig.SEARCH_ENGINE_ID;
         ArrayList<String> links = new ArrayList<>();
         ArrayList<String> titles = new ArrayList<>();
 
@@ -321,6 +321,11 @@ final class SearchResults {
             }
             selectedArray.clear();
             mode.finish();
+
+
+            //create obj of dbop class and write code to save file content
+
+
             View view = activity.findViewById(R.id.save);
             String snackText;
             if (size == 1) {

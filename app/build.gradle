@@ -1,5 +1,9 @@
 apply plugin: 'com.android.application'
 
+def apiKeyPropertiesFile = rootProject.file("apikey.properties")
+def apiKeyProperties = new Properties()
+apiKeyProperties.load(new FileInputStream(apiKeyPropertiesFile))
+
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
@@ -12,6 +16,9 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "SEARCH_API_KEY", apiKeyProperties['SEARCH_API_KEY'])
+        buildConfigField("String", "SEARCH_ENGINE_ID", apiKeyProperties['SEARCH_ENGINE_ID'])
     }
 
     buildTypes {
