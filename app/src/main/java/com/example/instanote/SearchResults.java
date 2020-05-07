@@ -138,6 +138,7 @@ final class SearchResults {
         private static final String TEXT = "TEXT";
         private static final String PINNED = "PINNED";
         private static final String LINK = "LINK";
+        private static final String ID = "ID";
         private ArrayList<String> links = new ArrayList<>();
         private ArrayList<String> linksLim;
         private ArrayList<String> titles = new ArrayList<>();
@@ -247,7 +248,7 @@ final class SearchResults {
             final int count = getCount();
             if (count == 3) {
                 resultsView.setLayoutManager(new LinearLayoutManager(context));
-                adapter = new PinnedAdapter(context, titlesLim, linksLim, htmlContent);
+                adapter = new PinnedAdapter(context, titlesLim, linksLim, htmlContent, null);
                 adapter.setClickListener(this);
                 adapter.setLongClickListener(this);
                 resultsView.setAdapter(adapter);
@@ -296,6 +297,7 @@ final class SearchResults {
                 intent.putExtra(TITLE, adapter.getCardTitle(position));
                 intent.putExtra(TEXT, adapter.getCardText(position));
                 intent.putExtra(LINK, adapter.getCardLink(position));
+                intent.putExtra(ID, adapter.getCardId(position));
                 intent.putExtra(PINNED, false);
                 context.startActivity(intent);
             } else {

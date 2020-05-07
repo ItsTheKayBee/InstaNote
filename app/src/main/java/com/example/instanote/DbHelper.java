@@ -4,15 +4,11 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import androidx.annotation.Nullable;
+public class DbHelper extends SQLiteOpenHelper {
+    private static final int DATABASE_VERSION = 1;
+    private static final String DATABASE_NAME = "InstaNote";
 
-public class DatabaseOperations extends SQLiteOpenHelper {
-    //db code
-    // crud operations
-    private static final int DATABASE_VERSION=1;
-    protected static final String DATABASE_NAME = "InstaNote";
-
-    public DatabaseOperations(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
+    DbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
@@ -28,6 +24,8 @@ public class DatabaseOperations extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+        db.execSQL("DROP TABLE IF EXISTS PinnedNotes");
+        onCreate(db);
     }
+
 }

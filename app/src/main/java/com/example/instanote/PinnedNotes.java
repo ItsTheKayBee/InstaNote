@@ -17,8 +17,8 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 
 public class PinnedNotes extends AppCompatActivity implements PinnedAdapter.CardClickListener, PinnedAdapter.CardLongClickListener {
@@ -27,6 +27,7 @@ public class PinnedNotes extends AppCompatActivity implements PinnedAdapter.Card
     public static final String TEXT = "TEXT";
     public static final String PINNED = "PINNED";
     public static final String LINK = "LINK";
+    public static final String ID = "ID";
     RecyclerView recyclerView;
     private PinnedAdapter adapter;
     private ActionMode mode = null;
@@ -34,18 +35,33 @@ public class PinnedNotes extends AppCompatActivity implements PinnedAdapter.Card
     private ArrayList<String> titlesList;
     private ArrayList<String> textList;
     private ArrayList<String> linkList;
+    private ArrayList<Integer> idList;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pinned_notes);
 
-        String[] title = {"Note1 lorem ipsum is is lorem ipsum is lorem ipsum lorem is lorem ipsum is is lorem ipsum is lorem ipsum lorem is", "Note2", "Note3", "Note4", "Note1", "Note2", "Note3", "Note4", "Note1", "Note2", "Note3", "Note4"};
-        titlesList = new ArrayList<>(Arrays.asList(title));
-        String[] text = {"lorem lorem ipsum is is lorem ipsum is lorem ipsum lorem is lorem ipsum is is lorem ipsum is lorem ipsum lorem is lorem ipsum is is lorem ipsum is lorem ipsum lorem is ipsum is is lorem ipsum is lorem ipsum lorem is ipsum lorem ipsum is lorem ipsum lorem ipsum lorem is ipsum lorem ipsum", "lorem ipsum is is lorem ipsum is lorem ipsum lorem is ipsum lorem ipsum is lorem ipsum lorem ipsum lorem is ipsum lorem ipsum edefe efwewfwe", "Noterrevre1 edefe lorem ipsum is is lorem ipsum is lorem ipsum lorem is ipsum lorem ipsum is lorem ipsum lorem ipsum lorem is ipsum lorem ipsum", "Noterrevre1 edefe efwewfwe", "Noterrevre1 edefe efwewfwe", "Noterrevre1 edefe efwewfwe", "lorem ipsum is is lorem ipsum is lorem ipsum lorem is ipsum lorem ipsum is lorem ipsum lorem ipsum lorem is ipsum lorem ipsum edefe efwewfwe", "Note4", "Note1", "lorem ipsum is is lorem ipsum is lorem ipsum lorem is ipsum lorem ipsum is lorem ipsum lorem ipsum lorem is ipsum lorem ipsum", "lorem ipsum is is lorem ipsum is lorem ipsum lorem is ipsum lorem ipsum is lorem ipsum lorem ipsum lorem is ipsum lorem ipsum", "lorem ipsum is is lorem ipsum is lorem ipsum lorem is ipsum lorem ipsum is lorem ipsum lorem ipsum lorem is ipsum lorem ipsum"};
-        textList = new ArrayList<>(Arrays.asList(text));
-        String[] links = {"https://en.wikipedia.org/wiki/Depth-first_search", "https://en.wikipedia.org/wiki/Depth-first_search", "https://en.wikipedia.org/wiki/Depth-first_search", "https://en.wikipedia.org/wiki/Depth-first_search", "https://en.wikipedia.org/wiki/Depth-first_search", "https://en.wikipedia.org/wiki/Depth-first_search", "https://en.wikipedia.org/wiki/Depth-first_search", "https://en.wikipedia.org/wiki/Depth-first_search", "https://en.wikipedia.org/wiki/Depth-first_search", "https://en.wikipedia.org/wiki/Depth-first_search", "https://en.wikipedia.org/wiki/Depth-first_search", "https://www.geeksforgeeks.org/depth-first-search-or-dfs-for-a-graph/"};
-        linkList = new ArrayList<>(Arrays.asList(links));
+//        String[] title = {"Note1 lorem ipsum is is lorem ipsum is lorem ipsum lorem is lorem ipsum is is lorem ipsum is lorem ipsum lorem is", "Note2", "Note3", "Note4", "Note1", "Note2", "Note3", "Note4", "Note1", "Note2", "Note3", "Note4"};
+        titlesList = new ArrayList<>();
+//        String[] text = {"lorem lorem ipsum is is lorem ipsum is lorem ipsum lorem is lorem ipsum is is lorem ipsum is lorem ipsum lorem is lorem ipsum is is lorem ipsum is lorem ipsum lorem is ipsum is is lorem ipsum is lorem ipsum lorem is ipsum lorem ipsum is lorem ipsum lorem ipsum lorem is ipsum lorem ipsum", "lorem ipsum is is lorem ipsum is lorem ipsum lorem is ipsum lorem ipsum is lorem ipsum lorem ipsum lorem is ipsum lorem ipsum edefe efwewfwe", "Noterrevre1 edefe lorem ipsum is is lorem ipsum is lorem ipsum lorem is ipsum lorem ipsum is lorem ipsum lorem ipsum lorem is ipsum lorem ipsum", "Noterrevre1 edefe efwewfwe", "Noterrevre1 edefe efwewfwe", "Noterrevre1 edefe efwewfwe", "lorem ipsum is is lorem ipsum is lorem ipsum lorem is ipsum lorem ipsum is lorem ipsum lorem ipsum lorem is ipsum lorem ipsum edefe efwewfwe", "Note4", "Note1", "lorem ipsum is is lorem ipsum is lorem ipsum lorem is ipsum lorem ipsum is lorem ipsum lorem ipsum lorem is ipsum lorem ipsum", "lorem ipsum is is lorem ipsum is lorem ipsum lorem is ipsum lorem ipsum is lorem ipsum lorem ipsum lorem is ipsum lorem ipsum", "lorem ipsum is is lorem ipsum is lorem ipsum lorem is ipsum lorem ipsum is lorem ipsum lorem ipsum lorem is ipsum lorem ipsum"};
+        textList = new ArrayList<>();
+//        String[] links = {"https://en.wikipedia.org/wiki/Depth-first_search", "https://en.wikipedia.org/wiki/Depth-first_search", "https://en.wikipedia.org/wiki/Depth-first_search", "https://en.wikipedia.org/wiki/Depth-first_search", "https://en.wikipedia.org/wiki/Depth-first_search", "https://en.wikipedia.org/wiki/Depth-first_search", "https://en.wikipedia.org/wiki/Depth-first_search", "https://en.wikipedia.org/wiki/Depth-first_search", "https://en.wikipedia.org/wiki/Depth-first_search", "https://en.wikipedia.org/wiki/Depth-first_search", "https://en.wikipedia.org/wiki/Depth-first_search", "https://www.geeksforgeeks.org/depth-first-search-or-dfs-for-a-graph/"};
+        linkList = new ArrayList<>();
+        idList = new ArrayList<>();
+
+        DbManager dbManager = new DbManager(this);
+        try {
+            dbManager.open();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        titlesList = dbManager.getAllPinnedNotes("title");
+        textList = dbManager.getAllPinnedNotes("content");
+        linkList = dbManager.getAllPinnedNotes("link");
+        idList = dbManager.getAllIds();
+        dbManager.close();
 
         setRecyclerView(titlesList, linkList, textList);
         selectedArray = new ArrayList<>();
@@ -101,7 +117,7 @@ public class PinnedNotes extends AppCompatActivity implements PinnedAdapter.Card
         recyclerView = findViewById(R.id.pinned_notes);
         int mNoOfColumns = Utility.calculateNoOfColumns(getApplicationContext(), 180);
         recyclerView.setLayoutManager(new GridLayoutManager(this, mNoOfColumns));
-        adapter = new PinnedAdapter(this, title, link, text);
+        adapter = new PinnedAdapter(this, title, link, text, idList);
         adapter.setClickListener(this);
         adapter.setLongClickListener(this);
         recyclerView.setAdapter(adapter);
@@ -147,21 +163,31 @@ public class PinnedNotes extends AppCompatActivity implements PinnedAdapter.Card
                 .setPositiveButton("DELETE", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-
+                        DbManager dbManager = new DbManager(PinnedNotes.this);
+                        try {
+                            dbManager.open();
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
                         Collections.sort(selectedArray);
                         int count = 0;
                         int size = selectedArray.size();
                         for (int j : selectedArray) {
+                            try {
+                                dbManager.deleteSelectedNote(idList.get(j - count));
+                            } catch (SQLException e) {
+                                e.printStackTrace();
+                            }
                             textList.remove(j - count);
                             titlesList.remove(j - count);
                             linkList.remove(j - count);
+                            idList.remove(j - count);
                             adapter.notifyItemRemoved(j - count);
                             count++;
                         }
+                        dbManager.close();
                         selectedArray.clear();
                         mode.finish();
-
-                        //delete files here
 
                         View view = findViewById(R.id.unsave);
                         String snackText;
@@ -185,6 +211,7 @@ public class PinnedNotes extends AppCompatActivity implements PinnedAdapter.Card
             intent.putExtra(TITLE, adapter.getCardTitle(position));
             intent.putExtra(TEXT, adapter.getCardText(position));
             intent.putExtra(LINK, adapter.getCardLink(position));
+            intent.putExtra(ID, adapter.getCardId(position));
             intent.putExtra(PINNED, true);
             startActivity(intent);
         } else {

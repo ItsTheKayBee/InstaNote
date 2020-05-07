@@ -1,5 +1,6 @@
 package com.example.instanote;
 
+import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -13,16 +14,18 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import java.sql.SQLException;
+
 public class ResultActivity extends AppCompatActivity {
 
-    private EditText resTitle;
-    private EditText resText;
-    private TextView resLink;
+    BluetoothShare bluetoothShare;
     boolean pinned = false;
     private ConstraintLayout resLayout;
+    private int id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,9 +34,10 @@ public class ResultActivity extends AppCompatActivity {
         String title = getIntent().getStringExtra(PinnedNotes.TITLE);
         String text = getIntent().getStringExtra(PinnedNotes.TEXT);
         final String link = getIntent().getStringExtra(PinnedNotes.LINK);
-        resText = findViewById(R.id.res_text);
-        resTitle = findViewById(R.id.res_title);
-        resLink = findViewById(R.id.res_link);
+        id = getIntent().getIntExtra(PinnedNotes.ID, 0);
+        EditText resText = findViewById(R.id.res_text);
+        EditText resTitle = findViewById(R.id.res_title);
+        TextView resLink = findViewById(R.id.res_link);
         resTitle.setText(title);
         resLink.setText(link);
 
@@ -86,7 +90,40 @@ public class ResultActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (!pinned && id != 0) {
+            DbManager dbManager = new DbManager(this);
+            try {
+                dbManager.open();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            try {
+                dbManager.deleteSelectedNote(id);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     private void shareThroughBluetooth() {
         //make BluetoothShare class obj here
+        bluetoothShare = new BluetoothShare(this, this);
+        BluetoothAdapter bluetoothAdapter = bluetoothShare.getBluetoothAdapter();
+        bluetoothShare.startBluetooth(bluetoothAdapter);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        try {
+            super.onActivityResult(requestCode, resultCode, data);
+            if (requestCode == BluetoothShare.getRequestEnableBt() && resultCode == RESULT_OK) {
+                bluetoothShare.getDetails();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -20,15 +20,23 @@ public class PinnedAdapter extends RecyclerView.Adapter<PinnedAdapter.PinnedView
     private ArrayList<String> cardTitleData;
     private ArrayList<String> cardTextData;
     private ArrayList<String> cardLinkData;
+    private ArrayList<Integer> cardIdData;
     private CardClickListener mClickListener;
     private ArrayList<Integer> selectedList;
     private CardLongClickListener mLongClickListener;
 
-    PinnedAdapter(Context ctx, ArrayList<String> title, ArrayList<String> link, ArrayList<String> text) {
+    PinnedAdapter(Context ctx, ArrayList<String> title, ArrayList<String> link, ArrayList<String> text, ArrayList<Integer> ids) {
         this.inflater = LayoutInflater.from(ctx);
         this.cardTitleData = title;
         this.cardTextData = text;
         this.cardLinkData = link;
+        this.cardIdData = ids;
+        if (cardIdData == null) {
+            cardIdData = new ArrayList<>();
+            for (int i = 0; i < cardTitleData.size(); i++) {
+                cardIdData.add(0);
+            }
+        }
         selectedList = new ArrayList<>();
     }
 
@@ -82,6 +90,10 @@ public class PinnedAdapter extends RecyclerView.Adapter<PinnedAdapter.PinnedView
 
     String getCardLink(int id) {
         return cardLinkData.get(id);
+    }
+
+    int getCardId(int id) {
+        return cardIdData.get(id);
     }
 
     void setClickListener(CardClickListener cardClickListener) {
