@@ -7,25 +7,16 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Message;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.lang.reflect.Method;
+import java.util.Objects;
 import java.util.Set;
 
 class BluetoothShare {
 
     private static final int REQUEST_ENABLE_BT = 400;
-    BroadcastReceiver myReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Message msg = Message.obtain();
-            String action = intent.getAction();
-            if (BluetoothDevice.ACTION_FOUND.equals(action)) {
-                //Found, add to a device list
-            }
-        }
-    };
     private BluetoothAdapter bluetoothAdapter;
     private Context context;
     private Activity activity;
@@ -76,6 +67,20 @@ class BluetoothShare {
         discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 120);
         activity.startActivity(discoverableIntent);
     }
+
+    BroadcastReceiver myReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                String deviceName = Objects.requireNonNull(device).getName();
+                String deviceHardwareAddress = Objects.requireNonNull(device).getAddress();
+                Log.d("BTOOTH", deviceName);
+                Log.d("BTOOTH", deviceHardwareAddress);
+            }
+        }
+    };
 
     void startSearching() {
         IntentFilter intentFilter = new IntentFilter(BluetoothDevice.ACTION_FOUND);

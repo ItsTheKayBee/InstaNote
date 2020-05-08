@@ -1,7 +1,9 @@
 package com.example.instanote;
 
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -12,11 +14,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 
 import java.sql.SQLException;
 
@@ -24,7 +26,6 @@ public class ResultActivity extends AppCompatActivity {
 
     BluetoothShare bluetoothShare;
     boolean pinned = false;
-    private ConstraintLayout resLayout;
     private int id;
 
     @Override
@@ -54,19 +55,22 @@ public class ResultActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+        registerReceiver(bluetoothShare.myReceiver, filter);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         pinned = getIntent().getBooleanExtra(PinnedNotes.PINNED, false);
+        inflater.inflate(R.menu.menu, menu);
         MenuItem star = menu.findItem(R.id.save);
         if (pinned) {
             star.setIcon(R.drawable.ic_star_white_24dp);
         } else {
             star.setIcon(R.drawable.ic_star_border_white_24dp);
         }
-        inflater.inflate(R.menu.menu, menu);
         return true;
     }
 
@@ -106,10 +110,11 @@ public class ResultActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+
+        unregisterReceiver(bluetoothShare.myReceiver);
     }
 
     private void shareThroughBluetooth() {
-        //make BluetoothShare class obj here
         bluetoothShare = new BluetoothShare(this, this);
         BluetoothAdapter bluetoothAdapter = bluetoothShare.getBluetoothAdapter();
         bluetoothShare.startBluetooth(bluetoothAdapter);
@@ -120,7 +125,10 @@ public class ResultActivity extends AppCompatActivity {
         try {
             super.onActivityResult(requestCode, resultCode, data);
             if (requestCode == BluetoothShare.getRequestEnableBt() && resultCode == RESULT_OK) {
-                bluetoothShare.getDetails();
+                bluetoothShare.startSearching();
+                Toast.makeText(this, "Bluetooth turned on", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Bluetooth not turned on", Toast.LENGTH_SHORT).show();
             }
         } catch (Exception e) {
             e.printStackTrace();

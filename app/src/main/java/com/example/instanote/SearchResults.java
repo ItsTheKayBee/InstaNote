@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -219,7 +218,6 @@ final class SearchResults {
                         BoilerpipeExtractor extractor = CommonExtractors.DEFAULT_EXTRACTOR;
                         HTMLHighlighter hh = HTMLHighlighter.newExtractingInstance();
                         String data = hh.process(url, extractor);
-                        Log.d("DOCUMENT", data);
 
                         htmlContent.add(data);
                         linksLim.add(links.get(i1));
