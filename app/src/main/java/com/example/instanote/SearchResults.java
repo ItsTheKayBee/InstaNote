@@ -34,6 +34,7 @@ import org.xml.sax.SAXException;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -316,15 +317,21 @@ final class SearchResults {
         private void save() {
             Collections.sort(selectedArray);
             int size = selectedArray.size();
-            for (int j : selectedArray) {
-                adapter.notifyItemChanged(j);
+            DbManager dbManager = new DbManager(context);
+            try {
+                dbManager.open();
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
+            for (int j : selectedArray) {
+                String content=htmlContent.get(j);
+                String title=titlesLim.get(j);
+                String link=linksLim.get(j);
+                dbManager.insertData(title,link,content);
+            }
+            dbManager.close();
             selectedArray.clear();
             mode.finish();
-
-
-            //create obj of dbop class and write code to save file content
-
 
             View view = activity.findViewById(R.id.save);
             String snackText;

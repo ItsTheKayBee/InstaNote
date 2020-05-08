@@ -1,5 +1,6 @@
 package com.example.instanote;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -11,6 +12,11 @@ class DbManager {
     private DbHelper dbHelper;
     private Context context;
     private SQLiteDatabase database;
+
+    public static final String ID = "ID";
+    public static final String TITLE = "TITLE";
+    public static final String TEXT = "CONTENT";
+    public static final String LINK = "LINK";
 
     DbManager(Context c) {
         context = c;
@@ -24,6 +30,23 @@ class DbManager {
 
     void close() {
         dbHelper.close();
+    }
+
+    void insertData(String title,String link,String content) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(TITLE,title);
+        contentValues.put(LINK,link);
+        contentValues.put(TEXT,content);
+        database.insert("PinnedNotes",null ,contentValues);
+    }
+
+    void updateData(String id,String title,String link,String content) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(ID,id);
+        contentValues.put(TITLE,title);
+        contentValues.put(LINK,link);
+        contentValues.put(TEXT,content);
+        database.update("PinnedNotes", contentValues, "ID = ?",new String[] { id });
     }
 
     ArrayList<String> getAllPinnedNotes(String column) {

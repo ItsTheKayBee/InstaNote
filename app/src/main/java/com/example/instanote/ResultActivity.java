@@ -27,6 +27,10 @@ public class ResultActivity extends AppCompatActivity {
     BluetoothShare bluetoothShare;
     boolean pinned = false;
     private int id;
+    private String ids;
+    EditText resText,resTitle;
+    TextView resLink;
+    private String content,titles,links;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,11 +40,15 @@ public class ResultActivity extends AppCompatActivity {
         String text = getIntent().getStringExtra(PinnedNotes.TEXT);
         final String link = getIntent().getStringExtra(PinnedNotes.LINK);
         id = getIntent().getIntExtra(PinnedNotes.ID, 0);
-        EditText resText = findViewById(R.id.res_text);
-        EditText resTitle = findViewById(R.id.res_title);
-        TextView resLink = findViewById(R.id.res_link);
+        ids= new Integer(id).toString();
+        resText = findViewById(R.id.res_text);
+        resTitle = findViewById(R.id.res_title);
+        resLink = findViewById(R.id.res_link);
         resTitle.setText(title);
         resLink.setText(link);
+        content=resText.getText().toString();
+        titles=resTitle.getText().toString();
+        links=resLink.getText().toString();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             resText.setText(Html.fromHtml(text, Html.FROM_HTML_MODE_COMPACT));
@@ -55,6 +63,8 @@ public class ResultActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        bluetoothShare = new BluetoothShare(this,this);
 
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
         registerReceiver(bluetoothShare.myReceiver, filter);
@@ -109,9 +119,22 @@ public class ResultActivity extends AppCompatActivity {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+            dbManager.close();
         }
 
         unregisterReceiver(bluetoothShare.myReceiver);
+
+        if(id!=0){
+            DbManager dbManager = new DbManager(this);
+            try {
+                dbManager.open();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            dbManager.updateData(ids,titles,links,content);
+            dbManager.close();
+        }
+
     }
 
     private void shareThroughBluetooth() {
