@@ -27,5 +27,4 @@ public class DbHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS PinnedNotes");
         onCreate(db);
     }
-
 }

@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.sql.SQLException;
@@ -36,20 +35,21 @@ public class PinnedNotes extends AppCompatActivity implements PinnedAdapter.Card
     private ArrayList<String> textList;
     private ArrayList<String> linkList;
     private ArrayList<Integer> idList;
-
+    ArrayList<String> newTitles;
+    ArrayList<String> newContent;
+    ArrayList<String> newLinks;
+    ArrayList<Integer> newIds;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pinned_notes);
 
-//        String[] title = {"Note1 lorem ipsum is is lorem ipsum is lorem ipsum lorem is lorem ipsum is is lorem ipsum is lorem ipsum lorem is", "Note2", "Note3", "Note4", "Note1", "Note2", "Note3", "Note4", "Note1", "Note2", "Note3", "Note4"};
         titlesList = new ArrayList<>();
-//        String[] text = {"lorem lorem ipsum is is lorem ipsum is lorem ipsum lorem is lorem ipsum is is lorem ipsum is lorem ipsum lorem is lorem ipsum is is lorem ipsum is lorem ipsum lorem is ipsum is is lorem ipsum is lorem ipsum lorem is ipsum lorem ipsum is lorem ipsum lorem ipsum lorem is ipsum lorem ipsum", "lorem ipsum is is lorem ipsum is lorem ipsum lorem is ipsum lorem ipsum is lorem ipsum lorem ipsum lorem is ipsum lorem ipsum edefe efwewfwe", "Noterrevre1 edefe lorem ipsum is is lorem ipsum is lorem ipsum lorem is ipsum lorem ipsum is lorem ipsum lorem ipsum lorem is ipsum lorem ipsum", "Noterrevre1 edefe efwewfwe", "Noterrevre1 edefe efwewfwe", "Noterrevre1 edefe efwewfwe", "lorem ipsum is is lorem ipsum is lorem ipsum lorem is ipsum lorem ipsum is lorem ipsum lorem ipsum lorem is ipsum lorem ipsum edefe efwewfwe", "Note4", "Note1", "lorem ipsum is is lorem ipsum is lorem ipsum lorem is ipsum lorem ipsum is lorem ipsum lorem ipsum lorem is ipsum lorem ipsum", "lorem ipsum is is lorem ipsum is lorem ipsum lorem is ipsum lorem ipsum is lorem ipsum lorem ipsum lorem is ipsum lorem ipsum", "lorem ipsum is is lorem ipsum is lorem ipsum lorem is ipsum lorem ipsum is lorem ipsum lorem ipsum lorem is ipsum lorem ipsum"};
         textList = new ArrayList<>();
-//        String[] links = {"https://en.wikipedia.org/wiki/Depth-first_search", "https://en.wikipedia.org/wiki/Depth-first_search", "https://en.wikipedia.org/wiki/Depth-first_search", "https://en.wikipedia.org/wiki/Depth-first_search", "https://en.wikipedia.org/wiki/Depth-first_search", "https://en.wikipedia.org/wiki/Depth-first_search", "https://en.wikipedia.org/wiki/Depth-first_search", "https://en.wikipedia.org/wiki/Depth-first_search", "https://en.wikipedia.org/wiki/Depth-first_search", "https://en.wikipedia.org/wiki/Depth-first_search", "https://en.wikipedia.org/wiki/Depth-first_search", "https://www.geeksforgeeks.org/depth-first-search-or-dfs-for-a-graph/"};
         linkList = new ArrayList<>();
         idList = new ArrayList<>();
+        selectedArray = new ArrayList<>();
 
         DbManager dbManager = new DbManager(this);
         try {
@@ -62,10 +62,7 @@ public class PinnedNotes extends AppCompatActivity implements PinnedAdapter.Card
         linkList = dbManager.getAllPinnedNotes("link");
         idList = dbManager.getAllIds();
         dbManager.close();
-
         setRecyclerView(titlesList, linkList, textList);
-        selectedArray = new ArrayList<>();
-
     }
 
     private ActionMode.Callback actionCallback = new ActionMode.Callback() {
@@ -196,7 +193,7 @@ public class PinnedNotes extends AppCompatActivity implements PinnedAdapter.Card
                         } else {
                             snackText = size + " notes deleted";
                         }
-                        Snackbar.make(view, snackText, BaseTransientBottomBar.LENGTH_SHORT)
+                        Snackbar.make(view, snackText, Snackbar.LENGTH_SHORT)
                                 .show();
                     }
                 })
@@ -216,6 +213,44 @@ public class PinnedNotes extends AppCompatActivity implements PinnedAdapter.Card
             startActivity(intent);
         } else {
             selectCard(view, position);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        refresh();
+    }
+
+    private void refresh() {
+        DbManager dbManager = new DbManager(this);
+        try {
+            dbManager.open();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        newTitles = dbManager.getAllPinnedNotes("title");
+        newContent = dbManager.getAllPinnedNotes("content");
+        newLinks = dbManager.getAllPinnedNotes("link");
+        newIds = dbManager.getAllIds();
+        titlesList.clear();
+        textList.clear();
+        linkList.clear();
+        idList.clear();
+        titlesList.addAll(newTitles);
+        textList.addAll(newContent);
+        linkList.addAll(newLinks);
+        idList.addAll(newIds);
+        dbManager.close();
+        adapter.notifyDataSetChanged();
+        if (ResultActivity.change != 0) {
+            View view = getWindow().getDecorView().findViewById(android.R.id.content);
+            String snackbarText = "";
+            if (ResultActivity.change == 1)
+                snackbarText = "Note unpinned and removed";
+            else if (ResultActivity.change == 2)
+                snackbarText = "Note updated";
+            Snackbar.make(view, snackbarText, Snackbar.LENGTH_SHORT).show();
         }
     }
 }

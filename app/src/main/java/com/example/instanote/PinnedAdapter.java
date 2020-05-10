@@ -24,6 +24,7 @@ public class PinnedAdapter extends RecyclerView.Adapter<PinnedAdapter.PinnedView
     private CardClickListener mClickListener;
     private ArrayList<Integer> selectedList;
     private CardLongClickListener mLongClickListener;
+    private LayoutInflater inflater;
 
     PinnedAdapter(Context ctx, ArrayList<String> title, ArrayList<String> link, ArrayList<String> text, ArrayList<Integer> ids) {
         this.inflater = LayoutInflater.from(ctx);
@@ -39,8 +40,6 @@ public class PinnedAdapter extends RecyclerView.Adapter<PinnedAdapter.PinnedView
         }
         selectedList = new ArrayList<>();
     }
-
-    private LayoutInflater inflater;
 
     void setLongClickListener(CardLongClickListener mLongClickListener) {
         this.mLongClickListener = mLongClickListener;

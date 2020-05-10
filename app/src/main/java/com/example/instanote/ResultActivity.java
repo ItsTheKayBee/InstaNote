@@ -28,9 +28,9 @@ public class ResultActivity extends AppCompatActivity {
     boolean pinned = false;
     private int id;
     private String ids;
-    EditText resText,resTitle;
+    static int change = 0;
     TextView resLink;
-    private String content,titles,links;
+    EditText resText, resTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,15 +40,12 @@ public class ResultActivity extends AppCompatActivity {
         String text = getIntent().getStringExtra(PinnedNotes.TEXT);
         final String link = getIntent().getStringExtra(PinnedNotes.LINK);
         id = getIntent().getIntExtra(PinnedNotes.ID, 0);
-        ids= new Integer(id).toString();
+        ids = Integer.toString(id);
         resText = findViewById(R.id.res_text);
         resTitle = findViewById(R.id.res_title);
         resLink = findViewById(R.id.res_link);
         resTitle.setText(title);
         resLink.setText(link);
-        content=resText.getText().toString();
-        titles=resTitle.getText().toString();
-        links=resLink.getText().toString();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             resText.setText(Html.fromHtml(text, Html.FROM_HTML_MODE_COMPACT));
@@ -64,7 +61,7 @@ public class ResultActivity extends AppCompatActivity {
             }
         });
 
-        bluetoothShare = new BluetoothShare(this,this);
+        bluetoothShare = new BluetoothShare(this, this);
 
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
         registerReceiver(bluetoothShare.myReceiver, filter);
@@ -105,8 +102,8 @@ public class ResultActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    protected void onPause() {
+        super.onPause();
         if (!pinned && id != 0) {
             DbManager dbManager = new DbManager(this);
             try {
@@ -120,21 +117,44 @@ public class ResultActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
             dbManager.close();
+            change = 1;
         }
 
         unregisterReceiver(bluetoothShare.myReceiver);
 
-        if(id!=0){
+        String content;
+        String titles;
+        String links;
+
+        if (id != 0 && pinned) {
             DbManager dbManager = new DbManager(this);
             try {
                 dbManager.open();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-            dbManager.updateData(ids,titles,links,content);
+            content = resText.getText().toString();
+            titles = resTitle.getText().toString();
+            links = resLink.getText().toString();
+            dbManager.updateData(ids, titles, links, content);
             dbManager.close();
+            change = 2;
         }
 
+        if (id == 0 && pinned) {
+            DbManager dbManager = new DbManager(this);
+            try {
+                dbManager.open();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            content = resText.getText().toString();
+            titles = resTitle.getText().toString();
+            links = resLink.getText().toString();
+            dbManager.insertData(titles, links, content);
+            dbManager.close();
+            change = 3;
+        }
     }
 
     private void shareThroughBluetooth() {

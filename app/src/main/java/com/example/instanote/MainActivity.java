@@ -3,7 +3,6 @@ package com.example.instanote;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,6 +11,8 @@ import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener;
@@ -22,7 +23,6 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     private SearchView searchView;
     private ObjectAnimator objectAnimator;
     private RelativeLayout darkSearchLayout;
-    private float yOrg;
     private Menu menu = null;
 
     @Override
@@ -31,17 +31,19 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         setContentView(R.layout.activity_main);
         searchView = findViewById(R.id.search_bar);
         darkSearchLayout = findViewById(R.id.dim_layout);
-        DisplayMetrics displayMetrics = this.getResources().getDisplayMetrics();
-        yOrg = displayMetrics.heightPixels / displayMetrics.density;
 
         searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
-                    searchView.animate().translationY(-yOrg).setDuration(300).start();
+                    ObjectAnimator animation = ObjectAnimator.ofFloat(searchView, "y", 50f);
+                    animation.setDuration(300);
+                    animation.start();
                     darkSearchLayout.setVisibility(View.VISIBLE);
                 } else {
-                    searchView.animate().translationY(0).setDuration(300).start();
+                    ObjectAnimator animation = ObjectAnimator.ofFloat(searchView, "translationY", 0);
+                    animation.setDuration(300);
+                    animation.start();
                     searchView.clearFocus();
                     darkSearchLayout.setVisibility(View.GONE);
                 }
@@ -72,6 +74,11 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         boolean focus = getIntent().getBooleanExtra(FOCUS, false);
         if (focus) {
             searchView.requestFocus();
+        }
+        if (ResultActivity.change == 3) {
+            View view = getWindow().getDecorView().findViewById(android.R.id.content);
+            String snackbarText = "Note pinned";
+            Snackbar.make(view, snackbarText, Snackbar.LENGTH_SHORT).show();
         }
     }
 

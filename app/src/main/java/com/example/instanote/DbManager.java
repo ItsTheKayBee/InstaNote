@@ -13,10 +13,10 @@ class DbManager {
     private Context context;
     private SQLiteDatabase database;
 
-    public static final String ID = "ID";
-    public static final String TITLE = "TITLE";
-    public static final String TEXT = "CONTENT";
-    public static final String LINK = "LINK";
+    private static final String ID = "ID";
+    private static final String TITLE = "TITLE";
+    private static final String TEXT = "CONTENT";
+    private static final String LINK = "LINK";
 
     DbManager(Context c) {
         context = c;
@@ -32,21 +32,20 @@ class DbManager {
         dbHelper.close();
     }
 
-    void insertData(String title,String link,String content) {
+    void insertData(String title, String link, String content) {
         ContentValues contentValues = new ContentValues();
-        contentValues.put(TITLE,title);
-        contentValues.put(LINK,link);
-        contentValues.put(TEXT,content);
-        database.insert("PinnedNotes",null ,contentValues);
+        contentValues.put(TITLE, title);
+        contentValues.put(LINK, link);
+        contentValues.put(TEXT, content);
+        database.insert("PinnedNotes", null, contentValues);
     }
 
-    void updateData(String id,String title,String link,String content) {
+    void updateData(String id, String title, String link, String content) {
         ContentValues contentValues = new ContentValues();
-        contentValues.put(ID,id);
-        contentValues.put(TITLE,title);
-        contentValues.put(LINK,link);
-        contentValues.put(TEXT,content);
-        database.update("PinnedNotes", contentValues, "ID = ?",new String[] { id });
+        contentValues.put(TITLE, title);
+        contentValues.put(LINK, link);
+        contentValues.put(TEXT, content);
+        database.update("PinnedNotes", contentValues, "ID = ?", new String[]{id});
     }
 
     ArrayList<String> getAllPinnedNotes(String column) {

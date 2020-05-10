@@ -1,5 +1,6 @@
 package com.example.instanote;
 
+import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -260,7 +261,6 @@ final class SearchResults {
             resultsView.setVisibility(View.VISIBLE);
             selectedArray = new ArrayList<>();
             final MenuItem clearResults = menu.findItem(R.id.clear_results);
-            final View view = activity.getWindow().getDecorView().findViewById(android.R.id.content);
             clearResults.setVisible(true);
             clearResults.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                 @Override
@@ -324,10 +324,10 @@ final class SearchResults {
                 e.printStackTrace();
             }
             for (int j : selectedArray) {
-                String content=htmlContent.get(j);
-                String title=titlesLim.get(j);
-                String link=linksLim.get(j);
-                dbManager.insertData(title,link,content);
+                String content = htmlContent.get(j);
+                String title = titlesLim.get(j);
+                String link = linksLim.get(j);
+                dbManager.insertData(title, link, content);
             }
             dbManager.close();
             selectedArray.clear();
@@ -386,6 +386,25 @@ final class SearchResults {
                             adapter.notifyItemRangeChanged(0, linksLim.size());
                             resultsView.setVisibility(View.GONE);
                             searchView.setQuery("", false);
+                            ObjectAnimator animation = ObjectAnimator.ofFloat(searchView, "translationY", 0);
+                            animation.setDuration(300);
+                            animation.start();
+                            searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
+                                @Override
+                                public void onFocusChange(View view, boolean b) {
+                                    if (b) {
+                                        ObjectAnimator animation = ObjectAnimator.ofFloat(searchView, "y", 50f);
+                                        animation.setDuration(300);
+                                        animation.start();
+                                    } else {
+                                        ObjectAnimator animation = ObjectAnimator.ofFloat(searchView, "translationY", 0);
+                                        animation.setDuration(300);
+                                        animation.start();
+                                        searchView.clearFocus();
+                                    }
+                                }
+                            });
+                            fab.setVisibility(View.GONE);
                             View view = activity.getWindow().getDecorView().findViewById(android.R.id.content);
                             Snackbar.make(view, "All results cleared", Snackbar.LENGTH_SHORT).show();
                         }
