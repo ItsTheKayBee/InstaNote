@@ -40,7 +40,7 @@
             android:paddingTop="5dp"
             android:paddingRight="16dp"
             android:paddingBottom="5dp"
-            android:text="htpp://google.com/"
+            android:ellipsize="end"
             android:textAppearance="?attr/textAppearanceBody2"
             android:textColor="?android:attr/textColorSecondary"
             app:layout_constraintEnd_toEndOf="parent"

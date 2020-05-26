@@ -28,7 +28,7 @@ public class ResultActivity extends AppCompatActivity {
     boolean pinned = false;
     private int id;
     private String ids;
-    static int change = 0;
+    private static int change;
     TextView resLink;
     EditText resText, resTitle;
 
@@ -36,6 +36,7 @@ public class ResultActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
+        setChange(0);
         String title = getIntent().getStringExtra(PinnedNotes.TITLE);
         String text = getIntent().getStringExtra(PinnedNotes.TEXT);
         final String link = getIntent().getStringExtra(PinnedNotes.LINK);
@@ -44,8 +45,8 @@ public class ResultActivity extends AppCompatActivity {
         resText = findViewById(R.id.res_text);
         resTitle = findViewById(R.id.res_title);
         resLink = findViewById(R.id.res_link);
-        resTitle.setText(title);
         resLink.setText(link);
+        resTitle.setText(title);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             resText.setText(Html.fromHtml(text, Html.FROM_HTML_MODE_COMPACT));
@@ -117,7 +118,7 @@ public class ResultActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
             dbManager.close();
-            change = 1;
+            setChange(1);
         }
 
         unregisterReceiver(bluetoothShare.myReceiver);
@@ -133,12 +134,11 @@ public class ResultActivity extends AppCompatActivity {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-            content = resText.getText().toString();
+            content = Html.toHtml(resText.getText());
             titles = resTitle.getText().toString();
-            links = resLink.getText().toString();
-            dbManager.updateData(ids, titles, links, content);
+            dbManager.updateData(ids, titles, content);
             dbManager.close();
-            change = 2;
+            setChange(2);
         }
 
         if (id == 0 && pinned) {
@@ -148,12 +148,12 @@ public class ResultActivity extends AppCompatActivity {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-            content = resText.getText().toString();
+            content = Html.toHtml(resText.getText());
             titles = resTitle.getText().toString();
             links = resLink.getText().toString();
             dbManager.insertData(titles, links, content);
             dbManager.close();
-            change = 3;
+            setChange(3);
         }
     }
 
@@ -176,5 +176,13 @@ public class ResultActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public int getChange() {
+        return change;
+    }
+
+    public void setChange(int change) {
+        ResultActivity.change = change;
     }
 }

@@ -32,12 +32,6 @@ public class PinnedAdapter extends RecyclerView.Adapter<PinnedAdapter.PinnedView
         this.cardTextData = text;
         this.cardLinkData = link;
         this.cardIdData = ids;
-        if (cardIdData == null) {
-            cardIdData = new ArrayList<>();
-            for (int i = 0; i < cardTitleData.size(); i++) {
-                cardIdData.add(0);
-            }
-        }
         selectedList = new ArrayList<>();
     }
 
@@ -63,7 +57,6 @@ public class PinnedAdapter extends RecyclerView.Adapter<PinnedAdapter.PinnedView
         } else {
             holder.cardText.setText(Html.fromHtml(text));
         }
-
         holder.cardLink.setText(link);
         MaterialCardView materialCardView = (MaterialCardView) holder.itemView;
 

@@ -40,10 +40,9 @@ class DbManager {
         database.insert("PinnedNotes", null, contentValues);
     }
 
-    void updateData(String id, String title, String link, String content) {
+    void updateData(String id, String title, String content) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(TITLE, title);
-        contentValues.put(LINK, link);
         contentValues.put(TEXT, content);
         database.update("PinnedNotes", contentValues, "ID = ?", new String[]{id});
     }

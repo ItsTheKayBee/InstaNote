@@ -118,7 +118,7 @@ final class SearchResults {
                                         links.add(item.getString("link"));
                                     titles.add(item.getString("title"));
                                 }
-                                new GetResults(null).execute(links, titles, null, null, null);
+                                new GetResults(null).execute(links, titles, null, null, null, null);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -145,6 +145,7 @@ final class SearchResults {
         private ArrayList<String> titles = new ArrayList<>();
         private ArrayList<String> titlesLim;
         private ArrayList<String> htmlContent;
+        private ArrayList<Integer> idList;
         private ActionMode mode = null;
         private PinnedAdapter adapter;
         private ArrayList<Integer> selectedArray;
@@ -199,6 +200,7 @@ final class SearchResults {
             linksLim = arrayLists[2];
             titlesLim = arrayLists[3];
             htmlContent = arrayLists[4];
+            idList = arrayLists[5];
             if (linksLim == null) {
                 linksLim = new ArrayList<>();
             }
@@ -207,6 +209,9 @@ final class SearchResults {
             }
             if (htmlContent == null) {
                 htmlContent = new ArrayList<>();
+            }
+            if (idList == null) {
+                idList = new ArrayList<>();
             }
 
             int i = 0;
@@ -224,6 +229,7 @@ final class SearchResults {
                         htmlContent.add(data);
                         linksLim.add(links.get(i1));
                         titlesLim.add(titles.get(i1));
+                        idList.add(0);
                         i++;
                         publishProgress((int) ((i / (float) 3) * 100));
                     } catch (BoilerpipeProcessingException | IOException | SAXException e) {
@@ -248,7 +254,7 @@ final class SearchResults {
             final int count = getCount();
             if (count == 3) {
                 resultsView.setLayoutManager(new LinearLayoutManager(context));
-                adapter = new PinnedAdapter(context, titlesLim, linksLim, htmlContent, null);
+                adapter = new PinnedAdapter(context, titlesLim, linksLim, htmlContent, idList);
                 adapter.setClickListener(this);
                 adapter.setLongClickListener(this);
                 resultsView.setAdapter(adapter);
@@ -281,7 +287,7 @@ final class SearchResults {
                         if (count == 6) {
                             fab.setVisibility(View.GONE);
                         }
-                        new GetResults(adapter).execute(links, titles, linksLim, titlesLim, htmlContent);
+                        new GetResults(adapter).execute(links, titles, linksLim, titlesLim, htmlContent, idList);
                     } else {
                         fab.setVisibility(View.GONE);
                     }

@@ -243,14 +243,17 @@ public class PinnedNotes extends AppCompatActivity implements PinnedAdapter.Card
         idList.addAll(newIds);
         dbManager.close();
         adapter.notifyDataSetChanged();
-        if (ResultActivity.change != 0) {
+        ResultActivity resultActivity = new ResultActivity();
+        int change = resultActivity.getChange();
+        if (change != 0) {
             View view = getWindow().getDecorView().findViewById(android.R.id.content);
             String snackbarText = "";
-            if (ResultActivity.change == 1)
+            if (change == 1)
                 snackbarText = "Note unpinned and removed";
-            else if (ResultActivity.change == 2)
+            else if (change == 2)
                 snackbarText = "Note updated";
             Snackbar.make(view, snackbarText, Snackbar.LENGTH_SHORT).show();
+            resultActivity.setChange(0);
         }
     }
 }

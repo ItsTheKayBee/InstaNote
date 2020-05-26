@@ -75,10 +75,13 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         if (focus) {
             searchView.requestFocus();
         }
-        if (ResultActivity.change == 3) {
+        ResultActivity resultActivity = new ResultActivity();
+        int change = resultActivity.getChange();
+        if (change == 3) {
             View view = getWindow().getDecorView().findViewById(android.R.id.content);
             String snackbarText = "Note pinned";
             Snackbar.make(view, snackbarText, Snackbar.LENGTH_SHORT).show();
+            resultActivity.setChange(0);
         }
     }
 
