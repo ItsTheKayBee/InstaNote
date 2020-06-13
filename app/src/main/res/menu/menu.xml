@@ -6,9 +6,9 @@
         android:icon="@drawable/ic_star_border_white_24dp"
         android:title="Add to pinned notes"
         app:showAsAction="always" />
-    <item
-        android:id="@+id/share"
-        android:icon="@drawable/share"
-        android:title="Share"
-        app:showAsAction="always" />
+<!--    <item-->
+<!--        android:id="@+id/share"-->
+<!--        android:icon="@drawable/share"-->
+<!--        android:title="Share"-->
+<!--        app:showAsAction="always" />-->
 </menu>

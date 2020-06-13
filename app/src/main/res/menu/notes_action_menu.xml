@@ -6,10 +6,10 @@
         android:icon="@drawable/delete_note"
         android:title="Delete"
         app:showAsAction="always" />
-    <item
-        android:id="@+id/palette"
-        android:icon="@drawable/change_color"
-        android:title="Change Background Color"
-        app:showAsAction="always" />
+<!--    <item-->
+<!--        android:id="@+id/palette"-->
+<!--        android:icon="@drawable/change_color"-->
+<!--        android:title="Change Background Color"-->
+<!--        app:showAsAction="always" />-->
 
 </menu>

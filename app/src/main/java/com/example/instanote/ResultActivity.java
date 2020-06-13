@@ -94,9 +94,9 @@ public class ResultActivity extends AppCompatActivity {
                     pinned = false;
                 }
                 return true;
-            case R.id.share:
-                shareThroughBluetooth();
-                return true;
+//            case R.id.share:
+//                shareThroughBluetooth();
+//                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

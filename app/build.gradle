@@ -47,7 +47,7 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'com.google.android.material:material:1.2.0-alpha06'
-    implementation 'org.jsoup:jsoup:1.13.1'
+    //implementation 'org.jsoup:jsoup:1.13.1'
     implementation 'xerces:xercesImpl:2.12.0'
     implementation "de.l3s.boilerpipe:boilerpipe:1.1.0"
     implementation files('libs/nekohtml.jar')

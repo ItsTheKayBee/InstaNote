@@ -83,9 +83,9 @@ public class PinnedNotes extends AppCompatActivity implements PinnedAdapter.Card
                 case R.id.unsave:
                     unsave();
                     return true;
-                case R.id.palette:
-                    showToast();
-                    return true;
+//                case R.id.palette:
+//                    showToast();
+//                    return true;
                 default:
                     return false;
             }
@@ -142,9 +142,9 @@ public class PinnedNotes extends AppCompatActivity implements PinnedAdapter.Card
         adapter.notifyItemChanged(position);
     }
 
-    private void showToast() {
-        Toast.makeText(this, "color option selected", Toast.LENGTH_SHORT).show();
-    }
+//    private void showToast() {
+//        Toast.makeText(this, "color option selected", Toast.LENGTH_SHORT).show();
+//    }
 
     private void unsave() {
 
